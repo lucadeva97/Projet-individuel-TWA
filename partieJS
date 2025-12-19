@@ -1,0 +1,179 @@
+//1. Dopo che il DOM si è caricato
+document.addEventListener("DOMContentLoaded", function () {
+    const btnAggiungi = document.getElementById("btnAggiungi");
+    const errore = document.getElementById("errore");
+    const tabellaStudenti = document.querySelector("#tabellaStudenti tbody");
+
+    btnAggiungi.addEventListener("click", aggiungere);
+
+   //2. Al clic sul bottone aggiungi
+    function aggiungere() {
+      eliminaErrore();
+
+        const nomeCompletoInput = document.getElementById("nomeCompleto");
+        const emailInput = document.getElementById("email");
+        const votiInput = document.getElementById("voti");
+        const dataInput = document.getElementById("data");
+        const coloreInput = document.getElementById("colore");
+
+        const nomeCompleto = nomeCompletoInput.value.trim();
+        const email = emailInput.value.trim();
+        const votiStr = votiInput.value.trim();
+        const data = dataInput.value;
+        const colore = coloreInput.value || "#ffffff";
+
+        //3. Verifica campi obbligatori
+        if (!nomeCompleto || !email || !votiStr || !data) {
+            mostraErrore("Merci de remplir tous les champs marqués d'une étoile (*).");
+            return;
+        }
+
+        //4. Definire costanti nome cognome - errore se non sono divisi
+        const { nome, cognome } = nomeDiviso(nomeCompleto);
+        if (!nome || !cognome) {
+         mostraErrore("Merci de saisir le nom complet sous la forme : Prénom Nom.");
+            return;
+        }
+
+        //5. Chiama la funzione per il parsing dei voti
+        const voti = parseVoti(votiStr);
+        if (voti.length === 0) {
+         mostraErrore("Les notes saisies sont incorrectes. Vérifiez le format (exemple : 14; 15,5; 8).");
+            return;
+        }
+
+        //6. Verifica dell'email (le type=email fait déjà une première vérification)
+        if (!emailValida(email)) {
+         mostraErrore("L'adresse email saisie n'est pas valide.");
+            return;
+        }
+
+        //7. Définition des constantes à utiliser plus tard
+        const emailAnonimata = emailAnonima(email);
+
+        const statistiche = calcoli(voti);
+        const media = Number(statistiche.media.toFixed(1)); // 1 decimale
+        const min = statistiche.min;
+        const max = statistiche.max;
+        const conto = statistiche.conto;
+
+        //8. Creazione di una riga
+        const riga = document.createElement("tr");
+        riga.style.backgroundColor = colore;
+
+        riga.appendChild(creaCella(nome));
+        riga.appendChild(creaCella(cognome));
+        riga.appendChild(creaCella(emailAnonimata)); 
+        riga.appendChild(creaCella(dataDisplay(data)));
+        riga.appendChild(creaCella(media));
+        riga.appendChild(creaCella(min));
+        riga.appendChild(creaCella(max));
+        riga.appendChild(creaCella(conto));
+
+        //9. Cellule d'action + suppression
+        const cellaAzione = document.createElement("td");
+        cellaAzione.classList.add("cellaAzione");
+
+        const cancella = document.createElement("button");
+        cancella.textContent = "Supprimer";
+        cancella.classList.add("btnCancella");
+        cancella.addEventListener("click", function () {
+         riga.remove();
+        });
+
+        //10. Aggiungere la linea
+        cellaAzione.appendChild(cancella);
+        riga.appendChild(cellaAzione);
+        tabellaStudenti.appendChild(riga);
+
+    }
+
+    //11. per mostrare l'errore con il messaggio tra parentesi
+    function mostraErrore(message) {
+        errore.textContent = message;
+        errore.style.display = "block";
+    }
+
+    //12. per non mostrare più l'errore
+    function eliminaErrore() {
+        errore.textContent = "";
+        errore.style.display = "none";
+    }
+
+    //13. séparer nom et prénom
+    function nomeDiviso(nomeCompleto) {
+        const parti = nomeCompleto.split(/\s+/).filter(Boolean);
+        const nome = parti[0];
+        const cognome = parti.slice(1).join(" ");
+        return { nome, cognome };
+    }
+
+    //14. Fare il parsing dei voti
+    function parseVoti(votiStr) {
+        if (!votiStr) return [];
+
+        const rawParts = votiStr.split(";");
+        const voti = [];
+
+        for (let part of rawParts) {
+            const cleaned = part.trim().replace(",", ".");
+            if (!cleaned) continue;
+            const value = Number(cleaned);
+            if (!Number.isNaN(value)) {
+               voti.push(value);
+            }
+        }
+        return voti;
+    }
+
+    //15. Calcolare media, voto min, max e numero di voti
+    function calcoli(voti) {
+
+      let somma = 0;
+      let min = voti[0];
+      let max = voti[0];
+
+      for (let voto of voti) {
+          somma += voto;
+          if (voto < min) {
+              min = voto;
+          }
+          if (voto > max) {
+              max = voto;
+          }
+      }
+
+      const media = somma / voti.length;
+      return {
+          media: media,
+          min: min,
+          max: max,
+          conto: voti.length
+      };
+  }
+
+ //16. Crea una cella per il punto 8
+ function creaCella(text) {
+   const cella = document.createElement("td");
+   cella.textContent = text;
+   return cella;
+}
+
+ //17. Cambia il formato della data 
+function dataDisplay(data) {
+   const [anno, mese, giorno] = data.split("-");
+   return `${giorno}/${mese}/${anno}`;
+}
+
+ //18. controllare che l'email sia valida con un'espressione regolare
+function emailValida(email) {
+   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   return regex.test(email);
+}
+
+ //19. function pour anonymiser le mail après la première lettre et jusqu'au @
+function emailAnonima(email) {
+   return email.replace(/^(.).*(@.*)$/, "$1****$2");
+}
+   
+});
