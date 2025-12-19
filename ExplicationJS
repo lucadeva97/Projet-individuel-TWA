@@ -1,0 +1,37 @@
+Explication du fichier JS:
+1. Après le chargement du DOM, récuperer les constantes pour le bouton Ajouter, pour la div où montrer l’erreur et pour le tableau
+2. Fonction “ajouter”: récuperer les données insérées par l’utilisateur, éliminer les espaces blancs (cette fonction comprend les parties de 3 à 10)
+3. Vérifier les champs obligatoires
+s'ils ne sont pas complétés = erreur
+4. Définir les constantes nom / prénom
+si elles ne sont pas divisées = erreur
+5. Définir la constante notes
+si elle n’est pas parsée = erreur
+6. Si la mail n’est pas valide = erreur
+7. Définition des constantes à ajouter au tableau (mail anonymisée et tout ce qui concerne les notes)
+8. Création d’une ligne - addition d’une cellule pour chaque information (les cellules sont seulement additionnées, elles sont créées grâce à la fonction du point 16)
+9. Création de la cellule d’action - addition de la fonctionalité de supprimer une ligne créée
+10. Addition de la ligne au tableau
+
+11. Fonction pour montrer les messages d’erreur définis dans 3,4,5,6
+12. Fonction pour ne plus montrer ces messages
+13. Fonction pour séparer nom et prénom
+- divise la chaine de caractères quand un ou plus espaces sont trouvés / élimine les espaces au début et à la fin
+- prend la première chaine -> cela devient le champ prénom (seulement un mot pour le prénom)
+- le reste est unifié dans une autre chaine -> cela devient le champ nom
+14. Fonction pour parser les notes
+- vérifie qu’il y a des chiffres
+- divise la chaine quand il y a le symbole ;
+- les virgules sont transformées en points / les espaces sont éliminés
+- si une chaine est vide, elle n’est pas considérée
+- la chaine est convertée en nombre
+- on crée un tableau avec les notes parsées
+15. Une fois que les notes sont parsées, il faut calculer la moyenne, la note la plus haute, la plus basse et le nombre de notes:
+- pour chaque note, on va vérifier si elle est la plus haute, la plus basse. Si c’est le cas, elle va prendre la place du “max” ou “min” précedent
+- on va l’additionner à une somme totale. ensuite diviser la somme par la longueur du tableau créé dans la section précedente
+16. Fonction pour créer une cellule pour chaque information à ajouter au tableau (voir le point 8)
+17. Fonction pour changer l’ordre des éléments de la date (an, mois, jour devient jour, mois, an)
+18. Fonction pour vérifier si le mail est valide
+- avec l’expression régulière (l’input sur le form html n’est pas de type “email”)
+19. Fonction pour anonymiser le mail
+- avec une regex qui laisse le premier charactère et met des ** jusqu’au @
