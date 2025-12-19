@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Saisie des notes des élèves</title>
+    <link rel="stylesheet" href="prova.css">
+</head>
+
+<body>
+
+    <h1>Saisie des notes des élèves</h1>
+
+    <p>
+        <a href="explications.html">Page d'explications</a>
+    </p>
+
+    <form id="studentiForm" autocomplete="off">
+        <h2>Nouvel élève</h2>
+
+        <div class="formRow">
+            <div class="formGroup">
+                <label for="nomeCompleto">Nom complet *</label>
+                <input type="text" id="nomeCompleto" name="nomeCompleto" placeholder="Prénom Nom">
+                <small>Un seul prénom est possible</small>
+            </div>
+
+            <div class="formGroup">
+                <label for="email">Adresse mail *</label>
+                <input type="text" id="email" name="email" placeholder="prenom.nom@exemple.fr">
+            </div>
+        </div>
+
+        <div class="formRow">
+            <div class="formGroup">
+                <label for="voti">Notes *</label>
+                <input type="text" id="voti" name="voti" placeholder="14;15,5;8">
+                <small>Utilisez <strong>.</strong> ou <strong>,</strong> pour les décimales 
+                    <br> <strong>;</strong> pour séparer les notes</small>
+            </div>
+
+            <div class="formGroup">
+                <label for="data">Date de naissance *</label>
+                <input type="date" id="data" name="data">
+            </div>
+
+            <div class="formGroup">
+                <label for="colore">Couleur de fond</label>
+                <input type="color" id="colore" name="colore" value="#ffffff">
+                <small>Couleur utilisée pour la ligne de l'élève dans le tableau.</small>
+            </div>
+        </div>
+
+        <button type="button" id="btnAggiungi">Ajouter l'élève</button>
+
+        <div id="errore"></div>
+    </form>
+
+    <h2>Liste des élèves</h2>
+    <table id="tabellaStudenti">
+        <thead>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Mail (anonymisé)</th>
+                <th>Date de naissance</th>
+                <th>Moyenne</th>
+                <th>Note min</th>
+                <th>Note max</th>
+                <th>Nombre de notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--per aggiungere le linee-->
+        </tbody>
+    </table>
+
+    <script src="prova.js"></script>
+</body>
+</html>
